@@ -9,19 +9,59 @@
 HTU21D myHumidity;
 TwoWire myWire;
 
+float minimum_temperature=100;
+float maximum_temperature=-100;
+
+float minimum_humidity=120;
+float maximum_humidity=-120;
+
 void htu21_sensor_setup()
 {
     myWire.begin(SDA_PIN, SCL_PIN);
     myHumidity.begin(myWire);
 }
+
 float GetTemperature()
 {
-    return myHumidity.readTemperature();
+    float temperature = myHumidity.readTemperature();
+    if(temperature < minimum_temperature){
+        minimum_temperature = temperature;
+    }
+    if(temperature > maximum_temperature){
+        maximum_temperature = temperature;
+    }
+    return temperature;
+}
+
+float GetTemperatureMax()
+{
+    return maximum_temperature;
+}
+float GetTemperatureMin()
+{
+    return minimum_temperature;
 }
 
 float GetHumidity()
 {
-    return myHumidity.readHumidity();    
+    float humidity = myHumidity.readHumidity();    
+    if(humidity < minimum_humidity){
+        minimum_humidity = humidity;
+    }
+    if(humidity > maximum_humidity){
+        maximum_humidity = humidity;
+    }
+    return humidity;
+}
+
+float GetHumidityMax()
+{
+    return maximum_humidity;
+}
+
+float GetHumidityMin()
+{
+    return minimum_humidity;
 }
 
 String GetTemperatureStr()
@@ -46,4 +86,20 @@ String GetHumidityStr()
         x=50;
     }
     return String(x);
+}
+
+String GetTemperatureMaxStr(){
+    return String(GetTemperatureMax());
+}
+
+String GetTemperatureMinStr(){
+    return String(GetTemperatureMin());
+}
+
+String GetHumidityMaxStr(){
+    return String(GetHumidityMax());
+}
+
+String GetHumidityMinStr(){
+    return String(GetHumidityMin());
 }

@@ -10,6 +10,7 @@
 #include <ESPAsyncWebServer.h>     //Local WebServer used to serve the configuration portal
 #include <ESPAsyncWiFiManager.h>          //https://github.com/tzapu/WiFiManager WiFi Configuration Magic
 
+#include "definitions.h"
 #include "wifi_manager.h"
 
 #include "config.h"
@@ -59,6 +60,6 @@ void loop() {
     printlnI("The ESPTherm running WiFi config portal...");
     DNSServer dns;
     AsyncWiFiManager wm(&server,&dns);
-    wm.startConfigPortal(host_name);
+    wm.startConfigPortal(HOSTNAME);
   }
 }

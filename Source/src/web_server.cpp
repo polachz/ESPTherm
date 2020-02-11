@@ -35,6 +35,15 @@ void on_root(AsyncWebServerRequest *request)
     
     //request->send(200, "text/plain", "This is the main server page\n\nNow just testing");   
 }
+void on_update_web_vals(AsyncWebServerRequest *request)
+{
+   char buff[100];
+   snprintf (buff, sizeof(buff), "%f,%f,%f,%f,%f,%f",
+      GetTemperature(), GetTemperatureMax(),GetTemperatureMin(),
+      GetHumidity(),GetHumidityMax(),GetHumidityMin()   );\
+      request->send(200, "text/plain",buff );
+
+}
 void on_temperature(AsyncWebServerRequest *request)
 {
     printlnD("/temperature");
@@ -90,12 +99,13 @@ void web_server_register_handlers(AsyncWebServer& server)
 {
     server.onNotFound(on_not_found);
     server.on("/", HTTP_GET, on_root);
+    server.on("/updateWebVals", HTTP_GET,on_update_web_vals);
     server.on("/temperature", HTTP_GET,on_temperature);
     server.on("/humidity", HTTP_GET,on_humidity);
     server.on("/cus", HTTP_GET, on_cus);
     server.on("/reset", HTTP_GET, on_reset);
     server.on("/factoryReset", HTTP_GET, on_factory_reset);
-    server.on("//resetWlan", HTTP_GET, on_reset_wlan);
+    server.on("/resetWlan", HTTP_GET, on_reset_wlan);
     server.on("/startConfigAP", HTTP_GET, on_start_config_ap);
 
 }

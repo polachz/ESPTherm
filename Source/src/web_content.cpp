@@ -45,20 +45,12 @@ setInterval(function ( ) {
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
-      document.getElementById("temperature").innerHTML = this.responseText;
+      var arr =  this.responseText.split(",") ;
+      document.getElementById("temperature").innerHTML = arr[0];
+      document.getElementById("humidity").innerHTML = arr[3];
     }
   };
-  xhttp.open("GET", "/temperature", true);
-  xhttp.send();
-}, 10000) ;
-setInterval(function ( ) {
-  var xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-      document.getElementById("humidity").innerHTML = this.responseText;
-    }
-  };
-  xhttp.open("GET", "/humidity", true);
+  xhttp.open("GET", "/updateWebVals", true);
   xhttp.send();
 }, 10000) ;
 </script>
