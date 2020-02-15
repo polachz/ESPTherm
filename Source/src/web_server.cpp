@@ -8,7 +8,7 @@
 
 extern const char* page_content;
 
-void on_not_found(AsyncWebServerRequest *request) {
+/*void on_not_found(AsyncWebServerRequest *request) {
   String message = "File Not Found\n\n";
   message += "URI: ";
   message += request->url();
@@ -108,5 +108,5 @@ void web_server_register_handlers(AsyncWebServer& server)
     server.on("/resetWlan", HTTP_GET, on_reset_wlan);
     server.on("/startConfigAP", HTTP_GET, on_start_config_ap);
 
-}
+}*/
 

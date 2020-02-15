@@ -8,18 +8,16 @@
 #else
 #include <WiFi.h>
 #endif
-
-#include <ESPAsyncWebServer.h>     //Local WebServer used to serve the configuration portal
 #include <ESPAsyncWiFiManager.h>          //https://github.com/tzapu/WiFiManager WiFi Configuration Magic
 
 #include "common_funcs.h"
+#include "esp_therm_web_server.h"
 #include "config.h"
 
 //80:7D:3A:33:96:A6
 //172.17.17.238
 
 
-extern AsyncWebServer server;
 bool shouldSaveConfig = false;  // For WiFiManger custom config
 
 
@@ -39,11 +37,11 @@ void saveConfigCallback () {
   shouldSaveConfig = true;
 }
 
-void wifi_manager_operations()
+void wifi_manager_operations(ESPThermWebServer& estWebServer)
 {
   printlnD("wifi manger operations...");
   DNSServer dns;
-  AsyncWiFiManager wifiManager(&server,&dns);
+  AsyncWiFiManager wifiManager(&estWebServer,&dns);
     //set callback that gets called when connecting to previous WiFi fails, and enters Access Point mode
   wifiManager.setAPCallback(configModeCallback);
 

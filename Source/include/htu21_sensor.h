@@ -4,23 +4,29 @@
 
 #include <Arduino.h>
 
-void htu21_sensor_setup();
+#include <Wire.h>
+#include "SparkFunHTU21D.h"
 
-float GetTemperature();
-float GetTemperatureMax();
-float GetTemperatureMin();
+#include "sensor.h"
 
-float GetHumidity();
-float GetHumidityMax();
-float GetHumidityMin();
+class HTU21Sensor : public Sensor
+{
+public:
+    HTU21Sensor(ESPThermTimeDate& timeDate):
+        Sensor(timeDate) {}
 
-String GetTemperatureStr();
-String GetHumidityStr();
+    void Setup();
+protected:
 
-String GetTemperatureMaxStr();
-String GetTemperatureMinStr();
+    //Read current temperature from sensor 
+    virtual float GetCurrentTemperatureFromSensor() override;
+    //Read current humidity from sensor
+    virtual float GetCurrentHumidityFromSensor() override;
 
-String GetHumidityMaxStr();
-String GetHumidityMinStr();
+    HTU21D &HTUSensor() {return m_Sensor;}
+ 
+    HTU21D m_Sensor;
+    TwoWire m_Wire;
+};
 
 #endif

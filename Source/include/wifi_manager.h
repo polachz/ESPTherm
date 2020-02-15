@@ -1,6 +1,7 @@
 #ifndef __wifi_manager_H_
 #define __wifi_manager_H_
 
-void wifi_manager_operations();
+class ESPThermWebServer;
+void wifi_manager_operations(ESPThermWebServer& estWebServer);
 
 #endif
