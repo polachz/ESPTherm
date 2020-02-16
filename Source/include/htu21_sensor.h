@@ -9,11 +9,12 @@
 
 #include "sensor.h"
 
+
 class HTU21Sensor : public Sensor
 {
 public:
-    HTU21Sensor(ESPThermTimeDate& timeDate):
-        Sensor(timeDate) {}
+    HTU21Sensor(ESPThermTimeDate& timeDateObj):
+        Sensor(timeDateObj) {}
 
     void Setup();
 protected:
@@ -23,9 +24,9 @@ protected:
     //Read current humidity from sensor
     virtual float GetCurrentHumidityFromSensor() override;
 
-    HTU21D &HTUSensor() {return m_Sensor;}
+    HTU21D &HTUSensor() {return m_HTU21Sensor;}
  
-    HTU21D m_Sensor;
+    HTU21D m_HTU21Sensor;
     TwoWire m_Wire;
 };
 

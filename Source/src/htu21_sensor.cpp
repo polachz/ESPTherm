@@ -6,7 +6,7 @@
 void HTU21Sensor::Setup()
 {
     m_Wire.begin(SDA_PIN, SCL_PIN);
-    m_Sensor.begin(m_Wire);
+    m_HTU21Sensor.begin(m_Wire);
 }
 
 float HTU21Sensor::GetCurrentTemperatureFromSensor()
