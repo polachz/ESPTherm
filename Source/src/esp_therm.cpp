@@ -18,3 +18,15 @@ void ESPTherm::LoopOperations()
 {
 
 }
+
+void ESPTherm::SignalHardError()
+{
+    printlnE("Hard Error Occurs!"); 
+    delay(1000);
+    printlnE("HARD Error Occurs!"); 
+    delay(1000);
+    printlnE("HARD ERROR Occurs!"); 
+    delay(2000);
+    printlnE("Going to reboot sytem in 1 sec...."); 
+    //ESP.restart();
+}

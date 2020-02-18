@@ -16,6 +16,7 @@
 #include "config.h"
 #include "common_funcs.h"
 
+#include "simulated_sensor.h"
 #include "htu21_sensor.h"
 #include "esp_therm_time_date.h"
 #include "esp_therm.h"
@@ -25,8 +26,11 @@ bool doResetWlan=false;
 bool runConfig_ap=false;
 
 ESPThermTimeDate espThermTimeDate(TIME_DATE_FORMAT, NTP_POOL,NTP_TIME_ZONE_OFFSET, NTP_REFRESH_TIME );
-HTU21Sensor htuSensor(espThermTimeDate);
-ESPTherm espTherm(htuSensor,espThermTimeDate,80);
+/*HTU21Sensor htuSensor(espThermTimeDate);
+ESPTherm espTherm(htuSensor,espThermTimeDate,80);*/
+
+SimulatedSensor simSensor(espThermTimeDate);
+ESPTherm espTherm(simSensor,espThermTimeDate,80);
 
 void setup() {
   //Initialize debugging

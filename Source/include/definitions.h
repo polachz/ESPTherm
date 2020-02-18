@@ -6,7 +6,13 @@
 
 //#define BOARD_LED 1    // ESP-12F has the built in LED on GPIO2, see https://github.com/esp8266/Arduino/issues/2192
 
-#define HOSTNAME "ESPTherm"   // Friendly hostname
+#define DEFAULT_HOSTNAME "ESPTherm"   // Friendly hostname
+
+#define DEFAULT_MQTT_HOST ""
+#define DEFAULT_MQTT_PORT ""
+#define DEFAULT_MQTT_USER ""
+#define DEFAULT_MQTT_PASS ""
+
 
 
 

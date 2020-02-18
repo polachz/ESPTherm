@@ -49,7 +49,7 @@ void wifi_manager_operations(ESPThermWebServer& estWebServer)
   wifiManager.setSaveConfigCallback(saveConfigCallback);
   AsyncWiFiManagerParameter host_title("<p><b>Host Name:</b></p>");
   wifiManager.addParameter(&host_title);
-  AsyncWiFiManagerParameter custom_host_name("name", HOSTNAME, host_name, 32);
+  AsyncWiFiManagerParameter custom_host_name("name", DEFAULT_HOSTNAME, host_name, 32);
   wifiManager.addParameter(&custom_host_name);
   WiFi.macAddress();
 #if defined(ENABLE_AMQTT)
@@ -88,7 +88,7 @@ WiFi.setSleepMode(WIFI_NONE_SLEEP);
     //if it does not connect it starts an access point with the specified name
     //here  "AutoConnectAP"
     //and goes into a blocking loop awaiting configuration
-    if (!wifiManager.autoConnect(HOSTNAME)) {
+    if (!wifiManager.autoConnect(DEFAULT_HOSTNAME)) {
         printlnE("failed to connect and hit timeout");
         //reset and try again, or maybe put it to deep sleep
         ESP.reset();  //Will be removed when upgrading to standalone offline McLightingUI version

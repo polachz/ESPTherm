@@ -29,6 +29,8 @@ public:
 
     ESPThermWebServer &WebServer() {return m_WebServer;}
     const ESPThermWebServer &WebServer() const {return m_WebServer;}
+
+    static void SignalHardError();
 protected:
 void configModeCallback (AsyncWiFiManager *myWiFiManager) ;
 void saveConfigCallback ();

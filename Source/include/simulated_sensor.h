@@ -6,7 +6,8 @@
 
 class SimulatedSensor : public Sensor
 {
-    SimulatedSensor(ESPThermTimeDate& timeDateObj, bool useRandom):
+public:
+    SimulatedSensor(ESPThermTimeDate& timeDateObj, bool useRandom = true):
         Sensor(timeDateObj),
         m_ESPtimeDateObj(timeDateObj),
         m_Temper (23),
