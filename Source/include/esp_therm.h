@@ -11,6 +11,7 @@
 
 #include "definitions.h"
 #include "esp_therm_web_server.h"
+#include "esp_therm_config.h"
 #include "sensor.h"
 
 class ESPThermTimeDate;
@@ -19,9 +20,11 @@ class ESPTherm
 {
 
 public:
-    ESPTherm(Sensor& temperatureSensor, ESPThermTimeDate& timeDateObj, int, uint16_t webServerPort = 80):
-    m_WebServer(temperatureSensor, webServerPort),
+    ESPTherm(bool useMQTT, Sensor& temperatureSensor, ESPThermTimeDate& timeDateObj, int, uint16_t webServerPort = 80):
+    m_WebServer(m_Config, temperatureSensor, timeDateObj, webServerPort),
+    m_Config(useMQTT),
     m_ESPtimeDateObj(timeDateObj)
+    
     {}
 
     void Setup();
@@ -30,14 +33,23 @@ public:
     ESPThermWebServer &WebServer() {return m_WebServer;}
     const ESPThermWebServer &WebServer() const {return m_WebServer;}
 
+    EspThermConfig &Config() {return m_Config;}
+    const EspThermConfig &Config() const {return m_Config;}
+
+    
     static void SignalHardError();
 protected:
-void configModeCallback (AsyncWiFiManager *myWiFiManager) ;
-void saveConfigCallback ();
 
-ESPThermWebServer m_WebServer;
+    void ConfigWiFiConnection();
 
-ESPThermTimeDate& m_ESPtimeDateObj;
+    ESPThermTimeDate& TDObj(){return m_ESPtimeDateObj;}
+
+    ESPThermWebServer m_WebServer;
+    EspThermConfig m_Config;
+
+    ESPThermTimeDate& m_ESPtimeDateObj;
+
+
 
 };
 

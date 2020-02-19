@@ -8,6 +8,8 @@
 
 #define DEFAULT_HOSTNAME "ESPTherm"   // Friendly hostname
 
+#define USE_MQTT false
+
 #define DEFAULT_MQTT_HOST ""
 #define DEFAULT_MQTT_PORT ""
 #define DEFAULT_MQTT_USER ""

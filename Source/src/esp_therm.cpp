@@ -4,12 +4,27 @@
 
 #include <ESPAsyncWiFiManager.h>          //https://github.com/tzapu/WiFiManager WiFi Configuration Magic
 
+#include "esp_therm_wifi_manager.h"
+#include "esp_therm_time_date.h"
 #include "esp_therm.h"
 
 
 
 void ESPTherm::Setup()
 {
+  if(!Config().Setup()){
+    printlnE("Config Setup handlin problem!!!!"); 
+    SignalHardError();
+    return;
+  }
+  ConfigWiFiConnection();
+  if(Config().IsSaveConfigRequested()){
+    if(!Config().SaveToFS()){
+      printlnE("Unable to save confgig to FS !!!"); 
+      //but we can cvontinue
+    }
+  }
+  TDObj().Setup();
   WebServer().Setup();
 }
 
@@ -17,6 +32,12 @@ void ESPTherm::Setup()
 void ESPTherm::LoopOperations()
 {
 
+}
+
+void ESPTherm::ConfigWiFiConnection()
+{
+  EspThermWiFiManager wifiManager(Config(),WebServer());
+  wifiManager.DoConfig();
 }
 
 void ESPTherm::SignalHardError()
@@ -28,5 +49,5 @@ void ESPTherm::SignalHardError()
     printlnE("HARD ERROR Occurs!"); 
     delay(2000);
     printlnE("Going to reboot sytem in 1 sec...."); 
-    //ESP.restart();
+    ESP.restart();
 }

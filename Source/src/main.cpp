@@ -11,13 +11,10 @@
 #include <ESPAsyncWiFiManager.h>          //https://github.com/tzapu/WiFiManager WiFi Configuration Magic
 
 #include "definitions.h"
-#include "wifi_manager.h"
-
-#include "config.h"
-#include "common_funcs.h"
 
 #include "simulated_sensor.h"
 #include "htu21_sensor.h"
+
 #include "esp_therm_time_date.h"
 #include "esp_therm.h"
 
@@ -26,19 +23,17 @@ bool doResetWlan=false;
 bool runConfig_ap=false;
 
 ESPThermTimeDate espThermTimeDate(TIME_DATE_FORMAT, NTP_POOL,NTP_TIME_ZONE_OFFSET, NTP_REFRESH_TIME );
+
 /*HTU21Sensor htuSensor(espThermTimeDate);
-ESPTherm espTherm(htuSensor,espThermTimeDate,80);*/
+ESPTherm espTherm(USE_MQTT, htuSensor,espThermTimeDate,80);*/
 
 SimulatedSensor simSensor(espThermTimeDate);
-ESPTherm espTherm(simSensor,espThermTimeDate,80);
+ESPTherm espTherm(USE_MQTT, simSensor,espThermTimeDate,80);
 
 void setup() {
   //Initialize debugging
   Serial.begin(115200);
   debugSetLevel(DEBUG_INITIAL_LEVEL);
-  
-  wifi_manager_operations(espTherm.WebServer() );
-  espThermTimeDate.Setup();
   espTherm.Setup();  
 }
 

@@ -6,7 +6,9 @@
 #include "esp_therm_config.h"
 
 
-EspThermConfig::EspThermConfig():m_Mounted(false)
+EspThermConfig::EspThermConfig(bool mqttEnabled):m_Mounted(false),
+   m_SaveConfigRequest(false),
+   m_MQTTEnabled(mqttEnabled)
 {
   memset(m_HostName,0,sizeof(m_HostName));
   memset(m_MQTTHost,0,sizeof(m_MQTTHost));
@@ -17,18 +19,19 @@ EspThermConfig::EspThermConfig():m_Mounted(false)
 
 bool EspThermConfig::Setup()
 {
-  bool loadDefaults = false;
   if(!MountFS()){
-    loadDefaults = true;
-  }else{
-    if(!LoadFromFS()){
-      loadDefaults = true;
-    }
-  }
-  if(loadDefaults){
     FillByDefaults();
+    return false;
   }
-  return !loadDefaults;
+  if(!ConfigFileExists()){
+    FillByDefaults();
+    return true;
+  }
+  if(!LoadFromFS()){
+    FillByDefaults();
+    return false;
+  }
+  return true;
 }
 
 bool EspThermConfig::MountFS()
@@ -53,13 +56,17 @@ bool EspThermConfig::MountFS()
   }
   return m_Mounted;
 }
+bool EspThermConfig::ConfigFileExists()const
+{
+    if(!FSMounted()){ 
+       printlnI("Not mounted FS and try to access it!!");
+       return false;
+    }
+    return SPIFFS.exists("/config.json");
+}
 bool EspThermConfig::LoadFromFS()
 {
-  if(!FSMounted()){ 
-    return false;
-  }
-  //read configuration from FS JSON
-  if (SPIFFS.exists("/config.json")) {
+  if(ConfigFileExists()){
     //file exists, reading and loading
     printlnD("Reading config file... ");
     File configFile = SPIFFS.open("/config.json", "r");
@@ -104,21 +111,43 @@ bool EspThermConfig::LoadFromFS()
   //end read
   return false;
 }
-void EspThermConfig::FillByDefaults()
+
+void EspThermConfig::SetHostName(const char* newValue)
 {
-  strlcpy(m_HostName, DEFAULT_HOSTNAME, sizeof(m_HostName));
+  strlcpy(m_HostName, newValue, sizeof(m_HostName));
   //to be sure, write zero on the end
   m_HostName[sizeof(m_HostName)-1]=0;
-  strlcpy(m_MQTTHost, DEFAULT_MQTT_HOST, sizeof(m_MQTTHost));
-  m_MQTTHost[sizeof(m_MQTTHost)-1]=0;
-  strlcpy(m_MQTTPort, DEFAULT_MQTT_PORT, sizeof(m_MQTTPort));
-  m_MQTTPort[sizeof(m_MQTTPort)-1]=0;
-  strlcpy(m_MQTTUser, DEFAULT_MQTT_USER, sizeof(m_MQTTUser));
-  m_MQTTUser[sizeof(m_MQTTUser)-1]=0;
-  strlcpy(m_MQTTPass, DEFAULT_MQTT_PASS, sizeof(m_MQTTPass));
-  m_MQTTPass[sizeof(m_MQTTPass)-1]=0;
-
 }
+void EspThermConfig::SetMQTTHost(const char* newValue)
+{
+  strlcpy(m_MQTTHost, newValue, sizeof(m_MQTTHost));
+  m_MQTTHost[sizeof(m_MQTTHost)-1]=0;
+}
+void EspThermConfig::SetMQTTPort(const char* newValue)
+{
+  strlcpy(m_MQTTPort, newValue, sizeof(m_MQTTPort));
+  m_MQTTPort[sizeof(m_MQTTPort)-1]=0;
+}
+void EspThermConfig::SetMQTTUser(const char* newValue)
+{
+  strlcpy(m_MQTTUser, newValue, sizeof(m_MQTTUser));
+  m_MQTTUser[sizeof(m_MQTTUser)-1]=0;
+}
+void EspThermConfig::SetMQTTPass(const char* newValue)
+{
+  strlcpy(m_MQTTPass, newValue, sizeof(m_MQTTPass));
+  m_MQTTPass[sizeof(m_MQTTPass)-1]=0;
+}
+
+void EspThermConfig::FillByDefaults()
+{
+  SetHostName(DEFAULT_HOSTNAME);
+  SetMQTTHost(DEFAULT_MQTT_HOST);
+  SetMQTTPort(DEFAULT_MQTT_PORT);
+  SetMQTTUser(DEFAULT_MQTT_USER);
+  SetMQTTPass(DEFAULT_MQTT_PASS);
+}
+
 bool EspThermConfig::SaveToFS()
 {
   DynamicJsonDocument json(JSON_OBJECT_SIZE(6)+300);

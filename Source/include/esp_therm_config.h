@@ -4,12 +4,20 @@
 
 class EspThermConfig
 {
+    friend class EspThermWiFiManager;
+
     public:
-    EspThermConfig();
+    EspThermConfig(bool mqttEnabled);
+
+    bool IsMQTTEnabled()const {return m_MQTTEnabled;}
 
     bool Setup();
 
     bool FSMounted()const {return m_Mounted;}
+
+    bool ConfigFileExists()const;
+
+    bool IsSaveConfigRequested()const {return m_SaveConfigRequest;}
 
     bool LoadFromFS();
     bool SaveToFS();
@@ -23,6 +31,14 @@ class EspThermConfig
     static String FormatBytes(size_t bytes);
 protected:
 
+    void SetHostName(const char* newValue);
+    void SetMQTTHost(const char* newValue);
+    void SetMQTTPort(const char* newValue);
+    void SetMQTTUser(const char* newValue);
+    void SetMQTTPass(const char* newValue);
+
+    void SetSaveConfigRequest() {m_SaveConfigRequest = true;}
+
     bool MountFS();
     void FillByDefaults();
     bool m_Mounted;
@@ -32,6 +48,9 @@ protected:
     char m_MQTTPort[6];
     char m_MQTTUser[32];
     char m_MQTTPass[32];
+
+    bool m_SaveConfigRequest;
+    bool m_MQTTEnabled;
 };
 
 void config_storage_setup();

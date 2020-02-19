@@ -15,10 +15,13 @@ public:
         m_NTPClient(m_UDP,poolServerName,timeOffset,updateInterval)
         {}
     
+    ESPThermTimeDateFormat TDFormat()const{return m_TDFormat;}
     unsigned long EpochTime() {return m_NTPClient.getEpochTime();}
-
+    String TimeToString(unsigned long timestamp)const { return TimeToString(timestamp,TDFormat()); }
+    String TimeToStringLong(unsigned long timestamp)const { return TimeToStringLong(timestamp,TDFormat()); }
     void Setup();
     void LoopOperations();
+
     static String TimeToString(unsigned long timestamp, const ESPThermTimeDateFormat tf);
     static String TimeToStringLong(unsigned long timestamp, const ESPThermTimeDateFormat tf);
 protected:

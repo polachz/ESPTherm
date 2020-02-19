@@ -6,16 +6,28 @@
 #include "definitions.h"
 #include "sensor.h"
 
+class EspThermConfig;
+class ESPThermTimeDate;
+
 class ESPThermWebServer: public AsyncWebServer
 {
 public:
-    ESPThermWebServer(Sensor& temperatureSensor, uint16_t webServerPort):
+    ESPThermWebServer(EspThermConfig& espConfig, Sensor& temperatureSensor, ESPThermTimeDate& timeDateObj, uint16_t webServerPort):
         AsyncWebServer(webServerPort),
-        m_Sensor(temperatureSensor){}
+        m_Sensor(temperatureSensor),
+        m_Config(espConfig),
+        m_ESPtimeDateObj(timeDateObj) {}
 
     void Setup();
 protected:
 
+    EspThermConfig &Config() {return m_Config;}
+    const EspThermConfig &Config() const {return m_Config;}
+
+    ESPThermTimeDate& TimeObj(){ return m_ESPtimeDateObj;}
+    const ESPThermTimeDate& TimeObj()const { return m_ESPtimeDateObj;}
+
+    String MainPageProcessor(const String& var);
     //Web handlers:
     void on_not_found(AsyncWebServerRequest *request);
     void on_root(AsyncWebServerRequest *request);
@@ -26,6 +38,8 @@ protected:
     const Sensor& TemperatureSensor()const {return m_Sensor;}
 
     Sensor& m_Sensor;
+    EspThermConfig &m_Config;
+    ESPThermTimeDate& m_ESPtimeDateObj;
 
 };
 #endif

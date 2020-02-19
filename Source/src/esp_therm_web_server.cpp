@@ -1,6 +1,8 @@
 #include <Arduino.h>
 #include "debug.h"
 
+#include "esp_therm_config.h"
+#include "esp_therm_time_date.h"
 #include "esp_therm_web_server.h"
 
 using std::placeholders::_1;
@@ -40,17 +42,44 @@ void ESPThermWebServer::on_not_found(AsyncWebServerRequest *request) {
   request->send ( 404, "text/plain", message );
 }
 
+extern const char* page_content;
 void ESPThermWebServer::on_root(AsyncWebServerRequest *request)
 {
+    request->send_P(200, "text/html", page_content, 
+      std::bind( &ESPThermWebServer::MainPageProcessor, this, _1 ));
     /*String message = page_content;
     message.replace("%HOSTNAME%", host_name);
     message.replace("%TEMPERATURE%", GetTemperatureStr());
     message.replace("%HUMIDITY%", GetHumidityStr());
     
-    request->send(200, "text/html", message );*/
+    request->send_P(200, "text/html", page_content );*/
     
-    request->send(200, "text/plain", "This is the main server page\n\nNow just testing");   
+    //request->send(200, "text/plain", "This is the main server page\n\nNow just testing");   
 }
+
+String ESPThermWebServer::MainPageProcessor(const String& var)
+{
+    if(var == "HOSTNAME"){
+      return Config().HostName();
+    }
+    if(var == "DATE_TIME"){
+      return TimeObj().TimeToStringLong(TimeObj().EpochTime());
+    }
+    /*if(var == "TEMPERATURE")
+    if(var == "TEMPERATURE_MIN")
+    if(var == "TEMPERATURE_MIN_TS")
+    if(var == "TEMPERATURE_MAX")
+    if(var == "TEMPERATURE_MAX_TS")
+    if(var == "HUMIDITY")
+    if(var == "HUMIDITY_MIN")
+    if(var == "HUMIDITY_MIN_TS")
+    if(var == "HUMIDITY_MAX")
+    if(var == "HUMIDITY_MAX_TS")*/
+    String err = "Unknown RPC: ";
+    err += var;
+    return err;
+}
+
 void ESPThermWebServer::on_temperature(AsyncWebServerRequest *request)
 {
     printlnD("/temperature");
