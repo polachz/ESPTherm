@@ -23,8 +23,8 @@ public:
     ESPTherm(bool useMQTT, Sensor& temperatureSensor, ESPThermTimeDate& timeDateObj, int, uint16_t webServerPort = 80):
     m_WebServer(m_Config, temperatureSensor, timeDateObj, webServerPort),
     m_Config(useMQTT),
-    m_ESPtimeDateObj(timeDateObj)
-    
+    m_ESPtimeDateObj(timeDateObj),
+    m_Sensor(temperatureSensor)
     {}
 
     void Setup();
@@ -42,12 +42,18 @@ protected:
 
     void ConfigWiFiConnection();
 
-    ESPThermTimeDate& TDObj(){return m_ESPtimeDateObj;}
+    ESPThermTimeDate& TimeObj(){return m_ESPtimeDateObj;}
+    const ESPThermTimeDate& TimeObj() const {return m_ESPtimeDateObj;}
+
+    Sensor& SensorObj(){return m_Sensor;}
+    const Sensor& SensorObj() const {return m_Sensor;}
 
     ESPThermWebServer m_WebServer;
     EspThermConfig m_Config;
 
     ESPThermTimeDate& m_ESPtimeDateObj;
+
+    Sensor& m_Sensor;
 
 
 

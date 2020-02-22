@@ -9,9 +9,10 @@ class Sensor
 {
     
 protected:
-    Sensor(ESPThermTimeDate& timeDateObj );
+    Sensor(ESPThermTimeDate& timeDateObj, bool useCelsius = true);
 
 public:
+    bool UseCelsius()const { return m_Celsius;}
     //Read temperature from sensor and returns currently measured value
     float Temperature();
     //Returns minimal temperature value measured since begining of measurements
@@ -27,7 +28,11 @@ public:
     //Returns maximal humidity value measured since begining of measurements
     const ValueWithTimeStamp& HumidityMax()const {return m_HumidityMax.GetValueAndStamp();}
 
+    //Used to record min/max values when no web page is shown. Used by loop
+    void UpdateCachedValues();
 protected:
+
+    static float CelsiusToFarenheit(float celsius);
 
     //Must be overriden. Read current temperature from sensor (based on sensor HW type)
     virtual float GetCurrentTemperatureFromSensor()=0;
@@ -39,6 +44,8 @@ protected:
 
     CMinValue m_HumidityMin;
     CMaxValue m_HumidityMax;
+
+    bool m_Celsius;
     
 };
 

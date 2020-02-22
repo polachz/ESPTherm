@@ -6,6 +6,7 @@
 
 #include "esp_therm_wifi_manager.h"
 #include "esp_therm_time_date.h"
+#include "sensor.h"
 #include "esp_therm.h"
 
 
@@ -24,14 +25,23 @@ void ESPTherm::Setup()
       //but we can cvontinue
     }
   }
-  TDObj().Setup();
+  TimeObj().Setup();
   WebServer().Setup();
+
+  //Get first measurement
+  SensorObj().UpdateCachedValues();
+
 }
 
 
 void ESPTherm::LoopOperations()
 {
-
+    TimeObj().LoopOperations();
+    //Now my operations
+    //update temperature and humidity each 60 seconds
+    if(TimeObj().LoopIntervalInSecondsReached(60)){
+        SensorObj().UpdateCachedValues();
+    }
 }
 
 void ESPTherm::ConfigWiFiConnection()

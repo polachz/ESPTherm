@@ -13,8 +13,8 @@
 class HTU21Sensor : public Sensor
 {
 public:
-    HTU21Sensor(ESPThermTimeDate& timeDateObj):
-        Sensor(timeDateObj) {}
+    HTU21Sensor(ESPThermTimeDate& timeDateObj, bool useCelsius = true):
+        Sensor(timeDateObj, useCelsius) {}
 
     void Setup();
 protected:

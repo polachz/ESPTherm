@@ -11,7 +11,11 @@ void HTU21Sensor::Setup()
 
 float HTU21Sensor::GetCurrentTemperatureFromSensor()
 {
-    return HTUSensor().readTemperature();
+    if(UseCelsius()){
+        return HTUSensor().readTemperature();
+    }else{
+        return CelsiusToFarenheit(HTUSensor().readTemperature());
+    }
 }
 float HTU21Sensor::GetCurrentHumidityFromSensor()
 {

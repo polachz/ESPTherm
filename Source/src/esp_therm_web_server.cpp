@@ -12,8 +12,8 @@ void ESPThermWebServer::Setup()
     this->onNotFound(std::bind( &ESPThermWebServer::on_not_found, this, _1 ));
     this->on("/", HTTP_GET,std::bind( &ESPThermWebServer::on_root, this, _1 ));
     this->on("/temperature", HTTP_GET,std::bind( &ESPThermWebServer::on_temperature, this, _1 ));
-    this->on("/temperature", HTTP_GET,std::bind( &ESPThermWebServer::on_humidity, this, _1 ));
-
+    this->on("/humidity", HTTP_GET,std::bind( &ESPThermWebServer::on_humidity, this, _1 ));
+    this->on("/gwv", HTTP_GET,std::bind( &ESPThermWebServer::on_get_web_values, this, _1 ));
     /*server.on("/updateWebVals", HTTP_GET,on_update_web_vals);
     
     server.on("/cus", HTTP_GET, on_cus);
@@ -45,6 +45,9 @@ void ESPThermWebServer::on_not_found(AsyncWebServerRequest *request) {
 extern const char* page_content;
 void ESPThermWebServer::on_root(AsyncWebServerRequest *request)
 {
+    //Cache values to be sure tha min/max refect current values too
+    m_CurrentTemperature = SensorObj().Temperature();
+    m_CurrentHumidity = SensorObj().Humidity();
     request->send_P(200, "text/html", page_content, 
       std::bind( &ESPThermWebServer::MainPageProcessor, this, _1 ));
     /*String message = page_content;
@@ -65,16 +68,39 @@ String ESPThermWebServer::MainPageProcessor(const String& var)
     if(var == "DATE_TIME"){
       return TimeObj().TimeToStringLong(TimeObj().EpochTime());
     }
-    /*if(var == "TEMPERATURE")
-    if(var == "TEMPERATURE_MIN")
-    if(var == "TEMPERATURE_MIN_TS")
-    if(var == "TEMPERATURE_MAX")
-    if(var == "TEMPERATURE_MAX_TS")
-    if(var == "HUMIDITY")
-    if(var == "HUMIDITY_MIN")
-    if(var == "HUMIDITY_MIN_TS")
-    if(var == "HUMIDITY_MAX")
-    if(var == "HUMIDITY_MAX_TS")*/
+    if(var == "TEMPERATURE"){
+      return TemperatureToString(m_CurrentTemperature);
+    }
+    if(var == "TEMPERATURE_MIN"){
+      return TemperatureToString(SensorObj().TemperatureMin().Value());
+    }
+    if(var == "TEMPERATURE_MIN_TS"){
+      return TimeObj().TimeToString(SensorObj().TemperatureMin().TimeStamp());
+    }
+    if(var == "TEMPERATURE_MAX"){
+      return TemperatureToString(SensorObj().TemperatureMax().Value());
+    }
+    if(var == "TEMPERATURE_MAX_TS"){
+      return TimeObj().TimeToString(SensorObj().TemperatureMax().TimeStamp());
+    }
+    if(var == "HUMIDITY"){
+      return HumidityToString(m_CurrentHumidity);
+    }
+    if(var == "HUMIDITY_MIN"){
+      return HumidityToString(SensorObj().HumidityMin().Value());
+    }
+    if(var == "HUMIDITY_MIN_TS"){
+      return TimeObj().TimeToString(SensorObj().HumidityMin().TimeStamp());
+    }
+    if(var == "HUMIDITY_MAX"){
+        return HumidityToString(SensorObj().HumidityMax().Value());
+    }
+    if(var == "HUMIDITY_MAX_TS"){
+        return TimeObj().TimeToString(SensorObj().HumidityMax().TimeStamp());
+    }
+    if(var == "PROC"){
+        return "%";
+    }
     String err = "Unknown RPC: ";
     err += var;
     return err;
@@ -83,15 +109,59 @@ String ESPThermWebServer::MainPageProcessor(const String& var)
 void ESPThermWebServer::on_temperature(AsyncWebServerRequest *request)
 {
     printlnD("/temperature");
-    String str(TemperatureSensor().Temperature());
+    String str = TemperatureToString(SensorObj().Temperature());
     request->send(200, "text/plain", str.c_str());
 }
 
 void ESPThermWebServer::on_humidity(AsyncWebServerRequest *request)
 {
     printlnD("/humidity");
-    String str(TemperatureSensor().Humidity());
+    String str = HumidityToString(SensorObj().Humidity());
     request->send(200, "text/plain", str.c_str());
+}
+
+void ESPThermWebServer::on_get_web_values(AsyncWebServerRequest *request)
+{
+  String str;
+  str = Config().HostName();
+  str += ",";
+  str += TimeObj().TimeToStringLong(TimeObj().EpochTime());
+  str += ",";
+  str += TemperatureToString(SensorObj().Temperature());
+  str += ",";
+  str += TemperatureToString(SensorObj().TemperatureMin().Value());
+  str += ",";
+  str += TimeObj().TimeToString(SensorObj().TemperatureMin().TimeStamp());
+  str += ",";
+  str += TemperatureToString(SensorObj().TemperatureMax().Value());
+  str += ",";
+  str +=  TimeObj().TimeToString(SensorObj().TemperatureMax().TimeStamp());
+  str += ",";
+  str +=  HumidityToString(SensorObj().Humidity());
+  str += ",";
+  str +=  HumidityToString(SensorObj().HumidityMin().Value());
+  str += ",";
+  str +=  TimeObj().TimeToString(SensorObj().HumidityMin().TimeStamp());
+  str += ",";
+  str +=  HumidityToString(SensorObj().HumidityMax().Value());
+  str += ",";
+  str +=  TimeObj().TimeToString(SensorObj().HumidityMax().TimeStamp());
+  request->send(200, "text/plain", str.c_str());
+}
+
+String ESPThermWebServer::TemperatureToString(float temperature)
+{
+  String s(temperature);
+  return s;
+  /*char buff[40];
+  sprintf(buff,"%0.1f",temperature);
+  return buff;*/
+}
+
+String ESPThermWebServer::HumidityToString( float humidity)
+{
+  String s(humidity);
+  return s;
 }
 
 

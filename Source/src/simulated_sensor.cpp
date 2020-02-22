@@ -1,15 +1,28 @@
 #include "simulated_sensor.h"
 #include "esp_therm_time_date.h"
 
-bool SimulatedSensor::DoUpdate()
+
+SimulatedSensor::SimulatedSensor(ESPThermTimeDate& timeDateObj, bool useRandom ):
+        Sensor(timeDateObj),
+        m_ESPtimeDateObj(timeDateObj),
+        m_Temper (23),
+        m_Humid(50),
+        m_stampTemper(0),
+        m_stampHumid(0),
+        m_UseRandom(useRandom)
+         { randomSeed(timeDateObj.EpochTime());
+         }
+
+bool SimulatedSensor::DoUpdate(bool temperature)
 {
+    unsigned long& stamp=temperature? m_stampTemper : m_stampHumid;
     unsigned long now = TimeObj().EpochTime();
-    if(!m_stamp){
-        m_stamp =now;
+    if(!stamp){
+        stamp =now;
         return false;
     }else{
-        if((now-m_stamp)>10){
-            m_stamp =now;
+        if((now- stamp)>10){
+            stamp =now;
             return true;
         }
     }
@@ -18,9 +31,9 @@ bool SimulatedSensor::DoUpdate()
 
 float SimulatedSensor::GetCurrentTemperatureFromSensor()
 {
-    if(DoUpdate()){
+    if(DoUpdate(true)){
         if(Random()){
-           return ESP8266TrueRandom.random(20,40);     
+           return ((float)random(200,400))/10;     
         }else{
             if(m_Temper > 38){
                 m_Temper = 20;
@@ -33,9 +46,9 @@ float SimulatedSensor::GetCurrentTemperatureFromSensor()
 }
 float SimulatedSensor::GetCurrentHumidityFromSensor()
 {
-    if(DoUpdate()){
+    if(DoUpdate(false)){
         if(Random()){
-           return ESP8266TrueRandom.random(40,90);     
+           return random(40,90);     
         }else{
             if(m_Humid > 90){
                 m_Humid=40;

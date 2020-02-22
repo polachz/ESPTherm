@@ -108,17 +108,17 @@ const char* PROGMEM page_content = R"rawliteral(
     <img class="middle" src=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAYAAACpSkzOAAAABmJLR0QA/wD/AP+gvaeTAAACmUlEQVRIia3WXYjPWRgH8A+tGjExQ+wOuVHeLshLi9qMLYoU2rhy490NSimilZcLbu2295tCKyFXYi6QkllmuJK8JOOCZq0xXhKZcXGev/9vfv7/3/yn5lun8zvnPM/5Puc553vOb4jqaMRqrMQ0TIz+F7iHS/gH3QVzFGI49uMNevspr/E7hg2UZAJuZya6jM2YihFRpmATWjJ2tzBpICQd4fgAi2rw+QWPw+dxzFGI4ZmVXEND9I/DEbTjnbQf7TiI8WEzCjfD91/8UES0P7OSEskadOI45ktpq8cC/ImXWBu2o/Ek5thXjaQRXWFUStcaPMOsguBmS6k+gXVYHHP8H0F9h43KG09KV2c/JPU4kAlwd/RfjfbmvMNQSSdwJuodOCVpJY867JI2/pB0rG9kVnAy6iWVonsQUUyN9l38nLNZgef4pHykOzBH2rO2sPspSOZXIuoOx/pMe2TOpnTsS+UmfoyxUVIKC1HpKA7px6cDv+JjtHukLShhfdR/5x0rpS6/9OVB8AzLcmMLlVM3WdLbu/jug/NBtCXahyWd1Iq/JAEPxXXl9F7Xd6U2xMCVaI+VxDi3BpJ5YTsGO2Oe0p73Rt83NCjroTn6VuFsDURnJXmMxispvXcyRK9i7Bv2xcCTWNFAcSz8t+srgV4czRrWSRdiKbeNAyBpwnvpsv0tR9IbY01Zh+wz8VA6wrWglI3V+KMCUcWLdgJaMwYt2IrpkohHYga2YWb4tOKppL+2KkStlSKsw17pmS56xueE/Vucju+uKrZvi1LSIKn8HO6H8YeI/rx0r5FO1gVJM5+rEP1XRFQrLkraGYNHVYguDAZRs3TftQRpnuSL9G8xKNgTZD05kh7lR3HQsFS6xrqjXJZ5AL8CUBvnK2wA5lkAAAAASUVORK5CYII=>
     <span class="current-label" style= "margin-left: 4px;">Humidity: </span>
     <span class="current-value" id="humidity">%HUMIDITY%</span>
-    <sup class="current-unit">%</sup>
+    <sup class="current-unit">&percnt;</sup>
     </div>
      <div class="div-min" >
      <span class="minmax-label">Min: </span>
-     <span class="min-value" id="humidityMin">%HUMIDITY_MIN%</span><sup class="minmax-unit">%</sup>
+     <span class="min-value" id="humidityMin">%HUMIDITY_MIN%</span><sup class="minmax-unit">&percnt;</sup>
      <span class="mini-calendar"></span>
      <span class="minmax-date" id="humidityMinDate">%HUMIDITY_MIN_TS%</span>
     </div>
     <div class="div-max" >
      <span class="minmax-label">Max: </span>
-     <span class="max-value" id="humidityMax">%HUMIDITY_MAX%</span><sup class="minmax-unit">%</sup>
+     <span class="max-value" id="humidityMax">%HUMIDITY_MAX%</span><sup class="minmax-unit">&percnt;</sup>
      <span class="mini-calendar"></span>
      <span class="minmax-date" id="humidityMaxDate">%HUMIDITY_MAX_TS%</span>
     </div>
@@ -133,7 +133,6 @@ const char* PROGMEM page_content = R"rawliteral(
                 //var casik = parseInt(arr[1]);
                 //dtt.setTime(casik);
                 document.getElementById("host_name").innerHTML = arr[0];
-                //document.getElementById("date").innerHTML = dtt.toLocaleString("cs-CZ");
                 document.getElementById("date").innerHTML = arr[1];
                 document.getElementById("temperature").innerHTML = arr[2];
                 document.getElementById("temperatureMin").innerHTML = arr[3];

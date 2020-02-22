@@ -12,7 +12,8 @@ public:
 
     ESPThermTimeDate(ESPThermTimeDateFormat tdFormat, const char* poolServerName, int timeOffset, int updateInterval):
         m_TDFormat(tdFormat),
-        m_NTPClient(m_UDP,poolServerName,timeOffset,updateInterval)
+        m_NTPClient(m_UDP,poolServerName,timeOffset,updateInterval),
+        m_LoopCounter(0)
         {}
     
     ESPThermTimeDateFormat TDFormat()const{return m_TDFormat;}
@@ -20,7 +21,12 @@ public:
     String TimeToString(unsigned long timestamp)const { return TimeToString(timestamp,TDFormat()); }
     String TimeToStringLong(unsigned long timestamp)const { return TimeToStringLong(timestamp,TDFormat()); }
     void Setup();
+
     void LoopOperations();
+    
+    unsigned long LoopCyclesFinished()const {return m_LoopCounter; }
+
+    bool LoopIntervalInSecondsReached(unsigned long seconds);
 
     static String TimeToString(unsigned long timestamp, const ESPThermTimeDateFormat tf);
     static String TimeToStringLong(unsigned long timestamp, const ESPThermTimeDateFormat tf);
@@ -29,6 +35,10 @@ protected:
 
     WiFiUDP m_UDP;
     NTPClient m_NTPClient;
+
+    unsigned long m_LoopCounter;
+
+    static const unsigned long cLoopIntervalInMs =1000;
 
 };
 

@@ -6,10 +6,7 @@ void ESPThermTimeDate::Setup()
     m_NTPClient.begin();
     m_NTPClient.forceUpdate();
 }
-void ESPThermTimeDate::LoopOperations()
-{
-    m_NTPClient.update();
-}
+
 
 String ESPThermTimeDate::TimeToString(unsigned long timestamp, const ESPThermTimeDateFormat tf)
 {
@@ -21,13 +18,13 @@ String ESPThermTimeDate::TimeToString(unsigned long timestamp, const ESPThermTim
         case ESPThermTimeDateFormat::tdfCZ:
             snprintf (buff, sizeof(buff),
                      "%d.%d. %d %d:%02d",
-                     t.tm_mday,t.tm_mon,t.tm_year,
+                     t.tm_mday,t.tm_mon+1,t.tm_year+1900,
                      t.tm_hour,t.tm_min);
         break;
         case ESPThermTimeDateFormat::tdfUS:
         snprintf (buff, sizeof(buff),
                      "%d/%d/%d %d:%02d",
-                     t.tm_mon,t.tm_mday,t.tm_year,
+                     t.tm_mon+1,t.tm_mday,t.tm_year+1900,
                      t.tm_hour,t.tm_min);
         break;
         default:
@@ -59,3 +56,15 @@ String ESPThermTimeDate::TimeToString(unsigned long timestamp, const ESPThermTim
     }
     return String(buff);
  }
+
+ void ESPThermTimeDate::LoopOperations()
+{
+    m_NTPClient.update();
+    delay(cLoopIntervalInMs);
+    m_LoopCounter++;
+}
+
+bool ESPThermTimeDate::LoopIntervalInSecondsReached(unsigned long seconds)
+{
+    return ((LoopCyclesFinished() % seconds)==0);
+}
