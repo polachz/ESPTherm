@@ -10,13 +10,9 @@
 
 #define USE_MQTT false
 
-#define DEFAULT_MQTT_HOST ""
-#define DEFAULT_MQTT_PORT ""
-#define DEFAULT_MQTT_USER ""
-#define DEFAULT_MQTT_PASS ""
-
-
-
+//If true, measurement values are in degrees of Celsius
+//If false, easurement values are in degrees of Farenheit
+#define USE_DEGREE_OF_CELSIUS true
 
 //Offset in seconds for the time zone. 
 //UTC+1 = 3600
@@ -31,5 +27,15 @@ enum class ESPThermTimeDateFormat
 };
 
 #define TIME_DATE_FORMAT ESPThermTimeDateFormat::tdfCZ
+
+#define DEFAULT_MQTT_HOST ""
+#define DEFAULT_MQTT_PORT ""
+#define DEFAULT_MQTT_USER ""
+#define DEFAULT_MQTT_PASS ""
+
+
+
+
+
 
 #endif

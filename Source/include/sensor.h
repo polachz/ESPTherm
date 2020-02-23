@@ -12,6 +12,7 @@ protected:
     Sensor(ESPThermTimeDate& timeDateObj, bool useCelsius = true);
 
 public:
+
     bool UseCelsius()const { return m_Celsius;}
     //Read temperature from sensor and returns currently measured value
     float Temperature();
@@ -30,6 +31,8 @@ public:
 
     //Used to record min/max values when no web page is shown. Used by loop
     void UpdateCachedValues();
+
+    virtual void Setup() =0;
 protected:
 
     static float CelsiusToFarenheit(float celsius);

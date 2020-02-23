@@ -12,6 +12,10 @@ public:
     EspThermWiFiManager(EspThermConfig& espThermConfig, ESPThermWebServer& espWebServer);
 
     bool DoConfig();
+    void RunConfigPortal();
+
+    static void ResetWiFiSettings();
+
 protected:
 
 EspThermConfig& Config() {return m_ESPThermConfig; }

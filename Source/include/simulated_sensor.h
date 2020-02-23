@@ -6,8 +6,9 @@
 class SimulatedSensor : public Sensor
 {
 public:
-    SimulatedSensor(ESPThermTimeDate& timeDateObj, bool useRandom = true );
-        
+    SimulatedSensor(ESPThermTimeDate& timeDateObj, bool useDegreeOfCelsius, bool useRandom = true );
+    
+    virtual void Setup() override {};
 protected:
     bool Random() const {return m_UseRandom;}
     //Read current temperature from sensor 

@@ -2,8 +2,8 @@
 #include "esp_therm_time_date.h"
 
 
-SimulatedSensor::SimulatedSensor(ESPThermTimeDate& timeDateObj, bool useRandom ):
-        Sensor(timeDateObj),
+SimulatedSensor::SimulatedSensor(ESPThermTimeDate& timeDateObj, bool useDegreeOfCelsius, bool useRandom ):
+        Sensor(timeDateObj,useDegreeOfCelsius),
         m_ESPtimeDateObj(timeDateObj),
         m_Temper (23),
         m_Humid(50),

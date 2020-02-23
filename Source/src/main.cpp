@@ -24,11 +24,11 @@ bool runConfig_ap=false;
 
 ESPThermTimeDate espThermTimeDate(TIME_DATE_FORMAT, NTP_POOL,NTP_TIME_ZONE_OFFSET, NTP_REFRESH_TIME );
 
-/*HTU21Sensor htuSensor(espThermTimeDate);
-ESPTherm espTherm(USE_MQTT, htuSensor,espThermTimeDate,80);*/
+HTU21Sensor htuSensor(espThermTimeDate, USE_DEGREE_OF_CELSIUS);
+ESPTherm espTherm(USE_MQTT, htuSensor,espThermTimeDate,80);
 
-SimulatedSensor simSensor(espThermTimeDate,false);
-ESPTherm espTherm(USE_MQTT, simSensor,espThermTimeDate,80);
+/*SimulatedSensor simSensor(espThermTimeDate,USE_DEGREE_OF_CELSIUS,false);
+ESPTherm espTherm(USE_MQTT, simSensor,espThermTimeDate,80);*/
 
 void setup() {
   //Initialize debugging

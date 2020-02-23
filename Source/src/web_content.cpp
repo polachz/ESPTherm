@@ -89,17 +89,17 @@ const char* PROGMEM page_content = R"rawliteral(
     <img class="middle" src=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAYAAACpSkzOAAAABmJLR0QA/wD/AP+gvaeTAAABMUlEQVRIie2UsUoDQRRFj6t1IKAYWzWL/2Fl0A/Qv/EfJJUkpNVKEUsbCw2oHxCttEgTrVNE12LukMAmM7PjpPPCZdi3+97ZmfcYCFcdOAMGchvYqpAfpA3gHSiAiVwAH8B6SlBPhS+AmnypWDcl6EtFN2diDcU+U4IKOTReUpYIbJ/vU4NcPzBXa4kAK74PUu9o6aD/Hi1PIaAdrZOAb6KVA0PM2Z8rVmfafOsh0IyFrAJ9FTrF9GEPuJsDKoBH5VRWSwVuBTkBxgsg1gcxoI6S94FD4NsDmT3eklzjva31GXig2uCU5Eq279qY3oRoYY9coDetx4EQgNcY0HUFgNVVRA4Z8IJ/AKyf+MNNkwOjAMgI2I2FWDUxk+faifdW8N66UgYcybliA0wfb4AfX4Ff7/ZvKrsthI8AAAAASUVORK5CYII=>
     <span class="current-label">Temperature: </span>
     <span class="current-value" id="temperature">%TEMPERATURE%</span>
-    <sup class="current-unit">&deg;C</sup>
+    <sup class="current-unit">&deg;%TUNIT%</sup>
     </div>
      <div class="div-min" >
      <span class="minmax-label">Min: </span>
-     <span class="min-value" id="temperatureMin">%TEMPERATURE_MIN%</span><sup class="minmax-unit">&deg;C</sup>
+     <span class="min-value" id="temperatureMin">%TEMPERATURE_MIN%</span><sup class="minmax-unit">&deg;%TUNIT%</sup>
      <span class="mini-calendar"></span>
      <span class="minmax-date" id="temperatureMinDate">%TEMPERATURE_MIN_TS%</span>
     </div>
     <div class="div-max" >
      <span class="minmax-label">Max: </span>
-     <span class="max-value" id="temperatureMax">%TEMPERATURE_MAX%</span><sup class="minmax-unit">&deg;C</sup>
+     <span class="max-value" id="temperatureMax">%TEMPERATURE_MAX%</span><sup class="minmax-unit">&deg;%TUNIT%</sup>
      <span class="mini-calendar"></span>
      <span class="minmax-date" id="temperatureMaxDate">%TEMPERATURE_MAX_TS%</span>
     </div>

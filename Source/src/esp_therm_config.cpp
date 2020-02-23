@@ -178,6 +178,14 @@ bool EspThermConfig::SaveToFS()
   return true;
 }
 
+void EspThermConfig::ClearConfig()
+{
+  if(ConfigFileExists()){
+    //delete the file
+    SPIFFS.remove("/config.json");
+  }
+}
+
 String EspThermConfig::FormatBytes(size_t bytes)
 {
   if (bytes < 1024) {

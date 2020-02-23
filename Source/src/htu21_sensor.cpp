@@ -7,10 +7,29 @@ void HTU21Sensor::Setup()
 {
     m_Wire.begin(SDA_PIN, SCL_PIN);
     m_HTU21Sensor.begin(m_Wire);
+
+    Serial.print("Init Done");
+    Serial.println();
+    float humd = m_HTU21Sensor.readHumidity();
+  float temp = m_HTU21Sensor.readTemperature();
+
+  Serial.print("Time:");
+  Serial.print(millis());
+  Serial.print(" Temperature:");
+  Serial.print(temp, 1);
+  Serial.print("C");
+  Serial.print(" Humidity:");
+  Serial.print(humd, 1);
+  Serial.print("%");
+
+  Serial.println();
+
 }
 
 float HTU21Sensor::GetCurrentTemperatureFromSensor()
 {
+    Serial.print("TempEnter");
+    Serial.println();
     if(UseCelsius()){
         return HTUSensor().readTemperature();
     }else{
@@ -19,5 +38,7 @@ float HTU21Sensor::GetCurrentTemperatureFromSensor()
 }
 float HTU21Sensor::GetCurrentHumidityFromSensor()
 {
+    Serial.print("HumiEnter");
+    Serial.println();
     return HTUSensor().readHumidity();
 }

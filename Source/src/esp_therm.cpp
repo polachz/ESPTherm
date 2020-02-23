@@ -18,6 +18,7 @@ void ESPTherm::Setup()
     SignalHardError();
     return;
   }
+  SensorObj().Setup();
   ConfigWiFiConnection();
   if(Config().IsSaveConfigRequested()){
     if(!Config().SaveToFS()){
@@ -41,6 +42,17 @@ void ESPTherm::LoopOperations()
     //update temperature and humidity each 60 seconds
     if(TimeObj().LoopIntervalInSecondsReached(60)){
         SensorObj().UpdateCachedValues();
+    }
+    if(WebServer().IsFactoryResetRequired()){
+        Config().ClearConfig();
+        EspThermWiFiManager::ResetWiFiSettings();
+    }
+    if(WebServer().IsWlanResetRequired()){
+        EspThermWiFiManager::ResetWiFiSettings();
+    }
+    if(WebServer().IsRunAPConfigRequired()){
+      EspThermWiFiManager wifiManager(Config(),WebServer());
+      wifiManager.RunConfigPortal();    
     }
 }
 

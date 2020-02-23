@@ -22,6 +22,8 @@ class EspThermConfig
     bool LoadFromFS();
     bool SaveToFS();
 
+    void ClearConfig();
+
     const char* HostName() const {return m_HostName;}
     const char* MQTTHost() const {return m_MQTTHost;}
     const char* MQTTPort() const {return m_MQTTPort;} 

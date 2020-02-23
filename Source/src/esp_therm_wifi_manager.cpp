@@ -108,3 +108,21 @@ WiFi.setSleepMode(WIFI_NONE_SLEEP);
     pConfig=0;
     return true;
 }
+
+void EspThermWiFiManager::ResetWiFiSettings()
+{
+  printlnI("The ESPTherm resetting wlan...");
+  WiFi.disconnect(true);
+  printlnI("The ESPTherm will be rebooted in 2 seconds...");
+  delay(2000);
+  ESP.restart();
+
+}
+
+void EspThermWiFiManager::RunConfigPortal()
+{
+  printlnI("The ESPTherm running WiFi config portal...");
+  DNSServer dns;
+  AsyncWiFiManager wifiManager(WebServerPtr(),&dns);
+  wifiManager.startConfigPortal(Config().HostName());
+}

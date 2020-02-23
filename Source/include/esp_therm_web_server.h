@@ -18,9 +18,17 @@ public:
         m_Config(espConfig),
         m_ESPtimeDateObj(timeDateObj),
         m_CurrentTemperature(0),
-        m_CurrentHumidity(0) {}
+        m_CurrentHumidity(0),
+        m_FactoryResetRequired(false),
+        m_WlanResetRequired(false),
+        m_RunAPConfigRequired(false) {}
 
     void Setup();
+
+    bool IsFactoryResetRequired();
+    bool IsWlanResetRequired();
+    bool IsRunAPConfigRequired();
+    
 protected:
 
     EspThermConfig &Config() {return m_Config;}
@@ -39,6 +47,9 @@ protected:
     void on_temperature(AsyncWebServerRequest *request);
     void on_humidity(AsyncWebServerRequest *request);
     void on_get_web_values(AsyncWebServerRequest *request);
+    void on_factory_reset(AsyncWebServerRequest *request);
+    void on_reset_wlan(AsyncWebServerRequest *request);
+    void on_start_config_ap(AsyncWebServerRequest *request);
 
     static String TemperatureToString(float temperature);
 
@@ -51,6 +62,10 @@ protected:
 
     float m_CurrentTemperature;
     float m_CurrentHumidity;
+
+    bool m_FactoryResetRequired;
+    bool m_WlanResetRequired;
+    bool m_RunAPConfigRequired;
 
 };
 #endif

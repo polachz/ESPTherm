@@ -16,7 +16,7 @@ public:
     HTU21Sensor(ESPThermTimeDate& timeDateObj, bool useCelsius = true):
         Sensor(timeDateObj, useCelsius) {}
 
-    void Setup();
+    virtual void Setup() override;
 protected:
 
     //Read current temperature from sensor 
