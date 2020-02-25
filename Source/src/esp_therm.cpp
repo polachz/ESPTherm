@@ -30,7 +30,7 @@ void ESPTherm::Setup()
   WebServer().Setup();
 
   //Get first measurement
-  SensorObj().UpdateCachedValues();
+  SensorObj().UpdateValues();
 
 }
 
@@ -40,8 +40,8 @@ void ESPTherm::LoopOperations()
     TimeObj().LoopOperations();
     //Now my operations
     //update temperature and humidity each 60 seconds
-    if(TimeObj().LoopIntervalInSecondsReached(60)){
-        SensorObj().UpdateCachedValues();
+    if(TimeObj().LoopIntervalInSecondsReached(60)|| WebServer().IsWebPageUpdateRequestReceived()){
+        SensorObj().UpdateValues();
     }
     if(WebServer().IsFactoryResetRequired()){
         Config().ClearConfig();

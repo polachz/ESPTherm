@@ -30,7 +30,7 @@ public:
     const ValueWithTimeStamp& HumidityMax()const {return m_HumidityMax.GetValueAndStamp();}
 
     //Used to record min/max values when no web page is shown. Used by loop
-    void UpdateCachedValues();
+    void UpdateValues();
 
     virtual void Setup() =0;
 protected:
@@ -41,6 +41,9 @@ protected:
     virtual float GetCurrentTemperatureFromSensor()=0;
     //Must be overriden. Read current humidity from sensor (based on sensor HW type)
     virtual float GetCurrentHumidityFromSensor()=0;
+
+    float m_CachedTemperature;
+    float m_CachedHumidity;
 
     CMinValue m_TemperatureMin;
     CMaxValue m_TemperatureMax;

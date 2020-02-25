@@ -17,17 +17,17 @@ public:
         m_Sensor(temperatureSensor),
         m_Config(espConfig),
         m_ESPtimeDateObj(timeDateObj),
-        m_CurrentTemperature(0),
-        m_CurrentHumidity(0),
         m_FactoryResetRequired(false),
         m_WlanResetRequired(false),
-        m_RunAPConfigRequired(false) {}
+        m_RunAPConfigRequired(false),
+        m_WebPageUpdateRequestReceived(false) {}
 
     void Setup();
 
     bool IsFactoryResetRequired();
     bool IsWlanResetRequired();
     bool IsRunAPConfigRequired();
+    bool IsWebPageUpdateRequestReceived();
     
 protected:
 
@@ -60,12 +60,11 @@ protected:
     EspThermConfig &m_Config;
     ESPThermTimeDate& m_ESPtimeDateObj;
 
-    float m_CurrentTemperature;
-    float m_CurrentHumidity;
-
     bool m_FactoryResetRequired;
     bool m_WlanResetRequired;
     bool m_RunAPConfigRequired;
+
+    bool m_WebPageUpdateRequestReceived;
 
 };
 #endif

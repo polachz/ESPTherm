@@ -2,6 +2,8 @@
 #include "sensor.h"
 
 Sensor::Sensor(ESPThermTimeDate &timeDateObj,bool useCelsius ):
+    m_CachedTemperature(-100),
+    m_CachedHumidity(500),
     m_TemperatureMin(timeDateObj),
     m_TemperatureMax(timeDateObj),
     m_HumidityMin(timeDateObj),
@@ -11,19 +13,12 @@ Sensor::Sensor(ESPThermTimeDate &timeDateObj,bool useCelsius ):
 
 float Sensor::Temperature()
 {
-    float temperature = GetCurrentTemperatureFromSensor();
-    m_TemperatureMin.UpdateValue(temperature);
-    m_TemperatureMax.UpdateValue(temperature);
-    return temperature;
+    return m_CachedTemperature;
 }
 
 float Sensor::Humidity()
 {
-    float humidity = GetCurrentHumidityFromSensor();  
-    m_HumidityMin.UpdateValue(humidity);
-    m_HumidityMax.UpdateValue(humidity);  
-
-    return humidity;
+    return m_CachedHumidity;
 }
 
 float Sensor::CelsiusToFarenheit(float celsius)
@@ -31,8 +26,15 @@ float Sensor::CelsiusToFarenheit(float celsius)
     return celsius * 9/5 + 32;
 }
 
-void Sensor::UpdateCachedValues() {
-        printlnI("Refreshing Cached Temp and Humidity Values");
-        Temperature();
-        Humidity();
-    }
+void Sensor::UpdateValues() {
+    printlnI("Refreshing Cached Temp and Humidity Values");
+    float temperature = GetCurrentTemperatureFromSensor();
+    m_CachedTemperature=temperature;
+    m_TemperatureMin.UpdateValue(temperature);
+    m_TemperatureMax.UpdateValue(temperature);
+
+    float humidity = GetCurrentHumidityFromSensor();  
+    m_CachedHumidity=humidity;
+    m_HumidityMin.UpdateValue(humidity);
+    m_HumidityMax.UpdateValue(humidity);          
+}

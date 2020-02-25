@@ -129,9 +129,6 @@ const char* PROGMEM page_content = R"rawliteral(
         xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
                 var arr =  this.responseText.split(",") ;
-                //var dtt = new Date();
-                //var casik = parseInt(arr[1]);
-                //dtt.setTime(casik);
                 document.getElementById("host_name").innerHTML = arr[0];
                 document.getElementById("date").innerHTML = arr[1];
                 document.getElementById("temperature").innerHTML = arr[2];

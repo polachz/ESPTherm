@@ -40,19 +40,8 @@ void ESPThermWebServer::on_not_found(AsyncWebServerRequest *request) {
 extern const char* page_content;
 void ESPThermWebServer::on_root(AsyncWebServerRequest *request)
 {
-    //Cache values to be sure tha min/max refect current values too
-    m_CurrentTemperature = SensorObj().Temperature();
-    m_CurrentHumidity = SensorObj().Humidity();
     request->send_P(200, "text/html", page_content, 
       std::bind( &ESPThermWebServer::MainPageProcessor, this, _1 ));
-    /*String message = page_content;
-    message.replace("%HOSTNAME%", host_name);
-    message.replace("%TEMPERATURE%", GetTemperatureStr());
-    message.replace("%HUMIDITY%", GetHumidityStr());
-    
-    request->send_P(200, "text/html", page_content );*/
-    
-    //request->send(200, "text/plain", "This is the main server page\n\nNow just testing");   
 }
 
 String ESPThermWebServer::MainPageProcessor(const String& var)
@@ -67,7 +56,7 @@ String ESPThermWebServer::MainPageProcessor(const String& var)
       return SensorObj().UseCelsius()?"C":"F";
     }
     if(var == "TEMPERATURE"){
-      return TemperatureToString(m_CurrentTemperature);
+      return TemperatureToString(SensorObj().Temperature());
     }
     if(var == "TEMPERATURE_MIN"){
       return TemperatureToString(SensorObj().TemperatureMin().Value());
@@ -82,7 +71,7 @@ String ESPThermWebServer::MainPageProcessor(const String& var)
       return TimeObj().TimeToString(SensorObj().TemperatureMax().TimeStamp());
     }
     if(var == "HUMIDITY"){
-      return HumidityToString(m_CurrentHumidity);
+      return HumidityToString(SensorObj().Humidity());
     }
     if(var == "HUMIDITY_MIN"){
       return HumidityToString(SensorObj().HumidityMin().Value());
@@ -144,6 +133,7 @@ void ESPThermWebServer::on_get_web_values(AsyncWebServerRequest *request)
   str +=  HumidityToString(SensorObj().HumidityMax().Value());
   str += ",";
   str +=  TimeObj().TimeToString(SensorObj().HumidityMax().TimeStamp());
+  m_WebPageUpdateRequestReceived=true;
   request->send(200, "text/plain", str.c_str());
 }
 
@@ -176,16 +166,13 @@ void ESPThermWebServer::on_start_config_ap(AsyncWebServerRequest *request)
 
 String ESPThermWebServer::TemperatureToString(float temperature)
 {
-  String s(temperature);
+  String s(temperature,1);
   return s;
-  /*char buff[40];
-  sprintf(buff,"%0.1f",temperature);
-  return buff;*/
 }
 
 String ESPThermWebServer::HumidityToString( float humidity)
 {
-  String s(humidity);
+  String s(humidity,0);
   return s;
 }
 
@@ -210,6 +197,14 @@ bool ESPThermWebServer::IsRunAPConfigRequired()
   if(m_RunAPConfigRequired){
     m_RunAPConfigRequired = false;
     return true;
+  }
+  return false;
+}
+bool ESPThermWebServer::IsWebPageUpdateRequestReceived()
+{
+  if(m_WebPageUpdateRequestReceived){
+      m_WebPageUpdateRequestReceived =false;
+      return true;
   }
   return false;
 }
