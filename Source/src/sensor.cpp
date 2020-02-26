@@ -27,14 +27,18 @@ float Sensor::CelsiusToFarenheit(float celsius)
 }
 
 void Sensor::UpdateValues() {
-    printlnI("Refreshing Cached Temp and Humidity Values");
+    printlnD("Refreshing Cached Temp and Humidity Values");
     float temperature = GetCurrentTemperatureFromSensor();
-    m_CachedTemperature=temperature;
-    m_TemperatureMin.UpdateValue(temperature);
-    m_TemperatureMax.UpdateValue(temperature);
+    if(temperature<900){
+        m_CachedTemperature=temperature;
+        m_TemperatureMin.UpdateValue(temperature);
+        m_TemperatureMax.UpdateValue(temperature);
+    }
 
     float humidity = GetCurrentHumidityFromSensor();  
-    m_CachedHumidity=humidity;
-    m_HumidityMin.UpdateValue(humidity);
-    m_HumidityMax.UpdateValue(humidity);          
+    if(humidity<900){
+        m_CachedHumidity=humidity;
+        m_HumidityMin.UpdateValue(humidity);
+        m_HumidityMax.UpdateValue(humidity);          
+    }
 }

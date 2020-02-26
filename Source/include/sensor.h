@@ -38,8 +38,10 @@ protected:
     static float CelsiusToFarenheit(float celsius);
 
     //Must be overriden. Read current temperature from sensor (based on sensor HW type)
+    //On error, return value > 900
     virtual float GetCurrentTemperatureFromSensor()=0;
     //Must be overriden. Read current humidity from sensor (based on sensor HW type)
+    //On error, return value > 900
     virtual float GetCurrentHumidityFromSensor()=0;
 
     float m_CachedTemperature;

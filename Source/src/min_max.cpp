@@ -8,7 +8,10 @@
 void ValueWithTimeStamp::SetValue(float value)
 {
     m_Value = value;
-    m_TimeStamp = TimeObj().EpochTime();
+    unsigned long et = TimeObj().EpochTime();
+    if(et>946684800){
+        m_TimeStamp = et;
+    }
 }
 
 

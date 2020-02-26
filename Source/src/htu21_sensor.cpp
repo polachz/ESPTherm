@@ -28,8 +28,6 @@ void HTU21Sensor::Setup()
 
 float HTU21Sensor::GetCurrentTemperatureFromSensor()
 {
-    Serial.print("TempEnter");
-    Serial.println();
     if(UseCelsius()){
         return HTUSensor().readTemperature();
     }else{
@@ -38,7 +36,5 @@ float HTU21Sensor::GetCurrentTemperatureFromSensor()
 }
 float HTU21Sensor::GetCurrentHumidityFromSensor()
 {
-    Serial.print("HumiEnter");
-    Serial.println();
     return HTUSensor().readHumidity();
 }

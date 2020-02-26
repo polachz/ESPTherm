@@ -12,8 +12,8 @@
 //#define DEBUG_DISABLE_DEBUGGER true
 
 // Define the initial debug level here (uncomment to do it)
-//#define DEBUG_INITIAL_LEVEL DEBUG_LEVEL_INFO  	
-#define DEBUG_INITIAL_LEVEL DEBUG_LEVEL_DEBUG  	
+#define DEBUG_INITIAL_LEVEL DEBUG_LEVEL_INFO  	
+//#define DEBUG_INITIAL_LEVEL DEBUG_LEVEL_DEBUG  	
 //#define DEBUG_INITIAL_LEVEL DEBUG_LEVEL_VERBOSE  	
 
 // Disable auto function name (good if your debug yet contains it)

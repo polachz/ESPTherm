@@ -1,3 +1,5 @@
+#include "debug.h"
+
 #include "esp_therm_time_date.h"
 #include <ctime>
 
@@ -5,12 +7,27 @@ void ESPThermTimeDate::Setup()
 {
     m_NTPClient.begin();
     m_NTPClient.forceUpdate();
+    unsigned long et = m_NTPClient.getEpochTime();
+    int tries=0;
+    while(et<946684800){
+        delay(200);
+        m_NTPClient.forceUpdate();
+        et = m_NTPClient.getEpochTime();
+        tries++;
+        if(tries>150){
+            printlnE("Unable to get appropriate time from NTP Server!!!!");
+            ESP.restart();
+        }
+    }
+    
 }
 
 
 String ESPThermTimeDate::TimeToString(unsigned long timestamp, const ESPThermTimeDateFormat tf)
 {
-    
+    if(timestamp<946684800){
+        return String("Not synced clock");
+    }
     std::time_t epochTime = static_cast<std::time_t>(timestamp);
     std::tm t = *std::gmtime(&epochTime);
     char buff[200];
@@ -35,7 +52,10 @@ String ESPThermTimeDate::TimeToString(unsigned long timestamp, const ESPThermTim
 
  String ESPThermTimeDate::TimeToStringLong(unsigned long timestamp, const ESPThermTimeDateFormat tf)
  {
-     std::time_t epochTime = static_cast<std::time_t>(timestamp);
+    if(timestamp<946684800){
+        return String("Not synced clock");
+    }
+    std::time_t epochTime = static_cast<std::time_t>(timestamp);
     std::tm t = *std::gmtime(&epochTime);
     char buff[200];
     switch(tf){
